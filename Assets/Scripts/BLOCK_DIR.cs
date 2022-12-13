@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class BLOCK_DIR : MonoBehaviour, IExecutableBlock
 {
-    [SerializeField]
     GameObject player;
+    RectTransform border;
 
     [SerializeField]
     Vector2 direction;
@@ -17,6 +17,7 @@ public class BLOCK_DIR : MonoBehaviour, IExecutableBlock
     void Start()
     {
        player = GameObject.Find("Player");
+       border = player.transform.parent.GetComponent<RectTransform>();
     }
 
     bool startCMD = false;
@@ -34,8 +35,17 @@ public class BLOCK_DIR : MonoBehaviour, IExecutableBlock
     {
         if(startCMD)
         {
+            
             player.transform.Translate(direction * speed);
-           // Debug.Log(messege);
+            
+            if( (player.transform.position.x < border.position.x ||
+                player.transform.position.y < border.position.y ||
+                player.transform.position.x > border.position.x + border.rect.width ||
+                player.transform.position.y > border.position.y + border.rect.height))
+            {
+                startCMD = false;
+                Debug.Log("Stopped Player");
+            }
         }
     }
 }
