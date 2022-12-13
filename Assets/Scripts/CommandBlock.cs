@@ -6,9 +6,6 @@ using UnityEngine.UI;
 
 public class CommandBlock : MonoBehaviour,  IDragHandler, IBeginDragHandler, IEndDragHandler
 {
-
-    float width;
-    float height;
     GameObject dragged;
     GameObject LeftPanel;
     RectTransform rectTransform;
@@ -21,13 +18,11 @@ public class CommandBlock : MonoBehaviour,  IDragHandler, IBeginDragHandler, IEn
 
     void Start()
     {
-        LeftPanel = GameObject.Find("Canvas");
+        LeftPanel = GameObject.Find("Left Panel");
         StartBlock = GameObject.Find("START");
         rectTransform = GetComponent<RectTransform>();
         dragManager = GameObject.Find("Manager").GetComponent<DragInputManager>();
         startManager = GameObject.Find("Manager").GetComponent<StartCommands>();
-        width = rectTransform.sizeDelta.x;
-        height = rectTransform.sizeDelta.y;
     }
 
     public void OnEndDrag(PointerEventData data)
@@ -52,9 +47,24 @@ public class CommandBlock : MonoBehaviour,  IDragHandler, IBeginDragHandler, IEn
             dragged = data.pointerDrag.gameObject;
             data.pointerDrag.gameObject.GetComponent<IExecutableBlock>().Stop();
             dragRectTransform = data.pointerDrag.gameObject.GetComponent<RectTransform>();
-            dragRectTransform.gameObject.transform.parent = LeftPanel.transform;
+            if(getchildreninStart(dragged)==1)
+            {
+                dragRectTransform.gameObject.transform.parent = LeftPanel.transform;
+            }
         }
     }
 
+    int getchildreninStart(GameObject obj)
+    {
+        int ct = 1;
+        foreach(Transform n in obj.transform)
+        {
+            if(n.tag == "block")
+            {
+                ct++;
+            }
+        }
+        return ct;
+    }
 
 }
