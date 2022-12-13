@@ -11,7 +11,7 @@ public class DragInputManager : MonoBehaviour
     private GameObject StartBlock;
     float width, height;
 
-    int getchildreninStart(GameObject obj)
+    public int getchildreninStart(GameObject obj)
     {
         int ct = 1;
         foreach(Transform n in obj.transform)
@@ -37,7 +37,7 @@ public class DragInputManager : MonoBehaviour
     }
 
 
-    private void GetChildRecursive(GameObject obj, Transform Parent)
+    public void GetChildRecursive(GameObject obj, Transform Parent)
     {
         if (null == obj)
             return;

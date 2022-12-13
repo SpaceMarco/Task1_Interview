@@ -44,27 +44,37 @@ public class CommandBlock : MonoBehaviour,  IDragHandler, IBeginDragHandler, IEn
     {
         if(data.pointerDrag.gameObject.tag == "block")
         {
+            
             dragged = data.pointerDrag.gameObject;
+            Transform draggedParent = dragged.transform.parent;
             data.pointerDrag.gameObject.GetComponent<IExecutableBlock>().Stop();
             dragRectTransform = data.pointerDrag.gameObject.GetComponent<RectTransform>();
-            if(getchildreninStart(dragged)==1)
+            if(dragManager.getchildreninStart(dragged)==1)
             {
-                dragRectTransform.gameObject.transform.parent = LeftPanel.transform;
+                dragged.transform.parent = LeftPanel.transform;
+            }
+            if(draggedParent.tag == "block")
+            {
+                Debug.Log("dragged: "+draggedParent.name);
+                resetBlock(draggedParent.transform);
             }
         }
     }
 
-    int getchildreninStart(GameObject obj)
+    void resetBlock(Transform obj)
     {
-        int ct = 1;
-        foreach(Transform n in obj.transform)
+        int ct=1;
+        foreach (Transform child in obj.transform)
         {
-            if(n.tag == "block")
+            if(child.tag == "block")
             {
+                float height =  38f * ct;
+                child.position = new Vector2( obj.transform.position.x, (obj.transform.position.y - height) );
+                child.transform.parent = obj.transform;
+                dragManager.GetChildRecursive(child.gameObject,obj.transform);
                 ct++;
             }
         }
-        return ct;
     }
 
 }
